@@ -77,29 +77,15 @@ function Navigator(props) {
   
     const { classes, url, ...other } = props;
     let listMenu = [];
-    if (props.auths.admin && typeof props.auths.admin.hak_akses !== "undefined" && props.auths.admin.hak_akses == "master"){
-        listMenu =[
-            { id: 'Identitas', icon: <PeopleIcon />, link: '/identitas', },
-            { id: 'Data Alumni', icon: <DnsRoundedIcon />, link: '/data-alumni' },
-            { id: 'Data Pekerjaan', icon: <WorkIcon />, link: '/data-pekerjaan' },
-            { id: 'Data Prestasi', icon: <StarRateIcon />, link: '/data-prestasi' },
-            { id: 'Data Quisoner', icon: <EventNoteIcon />, link: '/data-quisoner' },
-            { id: 'Data Jurusan', icon: <AssignmentIcon />, link: '/data-jurusan' },
-            { id: 'Data Admin Jurusan', icon:<AccessibilityIcon/>,link:'/data-admin-jurusan'},
-     
-        ];
-    }
-    if (props.auths.admin && typeof props.auths.admin.hak_akses !== "undefined" && props.auths.admin.hak_akses == "admin") {
-        listMenu = [
-            { id: 'Identitas', icon: <PeopleIcon />, link: '/identitas', },
-            { id: 'Data Alumni', icon: <DnsRoundedIcon />, link: '/data-alumni' },
-            { id: 'Data Pekerjaan', icon: <WorkIcon />, link: '/data-pekerjaan' },
-            { id: 'Data Prestasi', icon: <StarRateIcon />, link: '/data-prestasi' },
-            { id: 'Data Quisoner', icon: <EventNoteIcon />, link: '/data-quisoner' },
-            { id: 'Data Jurusan', icon: <AssignmentIcon />, link: '/data-jurusan' },
-       
-        ];
-    }
+    listMenu = [
+        { id: 'Identitas', icon: <PeopleIcon />, link: '/identitas', },
+        { id: 'Data Alumni', icon: <DnsRoundedIcon />, link: '/data-alumni' },
+        { id: 'Data Pekerjaan', icon: <WorkIcon />, link: '/data-pekerjaan' },
+        { id: 'Data Prestasi', icon: <StarRateIcon />, link: '/data-prestasi' },
+        { id: 'Quisoner', icon: <EventNoteIcon />, link: '/data-quisoner' },
+        // { id: 'Data Jurusan', icon: <AssignmentIcon />, link: '/data-jurusan' },
+
+    ];
 
     
     return (

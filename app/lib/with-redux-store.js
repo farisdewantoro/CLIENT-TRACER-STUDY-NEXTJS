@@ -24,12 +24,12 @@ export default App => {
             const reduxStore = getOrCreateStore()
       
             if (appContext.ctx.req){
-                let admin_auth = appContext.ctx.req.user ? appContext.ctx.req.user : {};
+                let mahasiswa_auth = appContext.ctx.req.user ? appContext.ctx.req.user : {};
 
                 // Get or Create the store with `undefined` as initialState
                 // This allows you to set a custom default initialState
           
-                reduxStore.dispatch(setAuth(admin_auth));
+                reduxStore.dispatch(setAuth(mahasiswa_auth));
             }
       
             

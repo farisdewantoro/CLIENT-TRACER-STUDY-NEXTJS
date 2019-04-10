@@ -3,18 +3,16 @@ const passport = require('passport'),
 const db = require('../config/conn');
 const keys = require('../config/keys');
 const bcrypt = require('bcryptjs');
-const {AdminModel} = require('../models');
-const jwt = require('jsonwebtoken');
+const {MahasiswaModel} = require('../models');
 passport.serializeUser((user, done) => {
     done(null, user);
 })
 passport.deserializeUser((data, done) => {
-    let querySelect = new AdminModel().SelectAdmin;
-    db.query(querySelect, [data.username], (err, ress) => {
+    let querySelect = new MahasiswaModel().SelectMahasiswaNrp;
+    db.query(querySelect, [data.nrp], (err, ress) => {
         if (ress.length > 0) {
             let d = ress[0];
-            let hak_akses = jwt.verify(d.hak_akses, keys.jwt.secretOrPrivateKey);
-            d.hak_akses = hak_akses.hak_akses;
+   
             done(null,d );
         }
 
@@ -22,40 +20,37 @@ passport.deserializeUser((data, done) => {
 
 })
 
-passport.use(new LocalStrategy(
-    function (username, password, done) {
+passport.use(new LocalStrategy({
+    usernameField: 'nrp',
+    passwordField: 'kodePIN',
+},
+    function (nrp, kodePIN, done) {
 
- 
-        let querySelect = new AdminModel().SelectAdmin;
+        console.log({
+            nrp,kodePIN
+        })
+        let querySelect = new MahasiswaModel().SelectMahasiswa;
 
-        db.query(querySelect, [username], (err, result) => {
+        db.query(querySelect, [nrp,kodePIN], (err, result) => {
 
             if (err) return done(err, null);
             if (result.length > 0) {
                 let data = result[0];
-                let hak_akses = jwt.verify(data.hak_akses,keys.jwt.secretOrPrivateKey);
-                data.hak_akses = hak_akses.hak_akses;
-              
-                bcrypt.compare(password, data.password, function (err, result) {
-                    if (err) return done(err, null);
-                    if (result) {
-                        return done(null, data);
-                    }
-                });
-                // bcrypt.compare(password, data.password)
+                return done(null, data);
+                // bcrypt.compare(kodePIN, data.kodePIN)
                 //     .then(isMatch => {
                      
                 //         if (isMatch) {
                 //             return done(null, data);
                 //         } else {
-                //             return done(null, false, { message: 'Username atau password salah' });
+                //             return done(null, false, { message: 'nrp atau kodePIN salah' });
                 //         }
 
                 //     })
 
             }
             if (result.length === 0) {
-                return done(null, false, { message: 'Username atau password salah' });
+                return done(null, false, { message: 'nrp atau kodePIN salah' });
             }
 
 

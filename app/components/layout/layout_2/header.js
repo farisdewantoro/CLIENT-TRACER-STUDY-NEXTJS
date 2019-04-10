@@ -57,7 +57,7 @@ function Header(props) {
                     <Grid container alignItems="center" spacing={8}>
                         <Grid item xs>
                             <Typography color="inherit" variant="h5">
-                               Admin Tracer Study Itenas
+                          Tracer Study Itenas
                         </Typography>
                         </Grid>
                         <Grid item>

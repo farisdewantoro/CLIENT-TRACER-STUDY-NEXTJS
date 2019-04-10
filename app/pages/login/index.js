@@ -34,8 +34,8 @@ class Login extends Component {
 
   }
   state = {
-    username: '',
-    password: ''
+    nrp: '',
+    kodePIN: ''
   }
 
   onChange = (e) => {
@@ -46,8 +46,8 @@ class Login extends Component {
   onSubmitLogin = (e) => {
     e.preventDefault();
     let data = {
-      username: this.state.username.toString(),
-      password: this.state.password.toString()
+      nrp: this.state.nrp.toString(),
+      kodePIN: this.state.kodePIN.toString()
     }
     this.props.submitLogin(data);
  
@@ -56,7 +56,7 @@ class Login extends Component {
   render() {
 
     const { classes, errors,auths } = this.props;
-    const { username, password } = this.state;
+    const { nrp, kodePIN } = this.state;
     return (
       <div style={{ background:"#f58220",minHeight:"100vh"}}>
           <Grid container justify="center" >
@@ -79,7 +79,7 @@ class Login extends Component {
                       <Grid item md={12}>
                         <Grid container justify="center">
                           <Typography variant="h4">
-                           Admin Tracer Study
+                            Tracer Study
                       </Typography>
                         </Grid>
 
@@ -96,14 +96,14 @@ class Login extends Component {
                     <Grid item xs={12}>
                 
                       <FormControl className={classes.margin} fullWidth>
-                        <InputLabel shrink htmlFor="username" className={classes.bootstrapFormLabel}>
-                          Username
+                        <InputLabel shrink htmlFor="nrp" className={classes.bootstrapFormLabel}>
+                          NRP
                         </InputLabel>
                         <InputBase
-                          id="username"
-                          name="username"
+                          id="nrp"
+                          name="nrp"
                           required
-                          value={username}
+                          value={nrp}
                           onChange={this.onChange}
                           classes={{
                             root: classes.bootstrapRoot,
@@ -116,14 +116,14 @@ class Login extends Component {
                     <Grid item xs={12}>
                       <FormControl className={classes.margin} fullWidth>
                         <InputLabel shrink htmlFor="pin" className={classes.bootstrapFormLabel}>
-                          Password
+                          Kode Pin
                         </InputLabel>
                         <InputBase
                           id="pin"
-                          name="password"
+                          name="kodePIN"
                           type="number"
-                          value={password}
-                          type="password"
+                          value={kodePIN}
+                          type="kodePIN"
                           required
                           onChange={this.onChange}
                           classes={{

@@ -5,7 +5,36 @@ class Mahasiswa{
         this.InsertLulusan = `INSERT INTO lulusan set ? `;
         this.UpdateMahasiswa = `UPDATE mahasiswa set ? where nrp = ?`;
         this.UpdateLulusan = `UPDATE lulusan set ? where mahasiswa_id = ?`;
-
+        this.SelectMahasiswa = `SELECT 
+        m.id,
+        m.nrp,
+        m.nama,
+        m.email,
+        m.jurusan_id,
+        m.alamat,
+        m.noTelepon,
+        m.kodePIN,
+        j.nama as jurusan,
+        j.prodi
+        from mahasiswa as m
+        left join jurusan as j on m.jurusan_id = j.id
+        where m.nrp = ? and m.kodePIN = ?
+        `;
+        this.SelectMahasiswaNrp = `SELECT 
+        m.id,
+        m.nrp,
+        m.nama,
+        m.email,
+        m.jurusan_id,
+        m.alamat,
+        m.noTelepon,
+        m.kodePIN,
+        j.nama as jurusan,
+        j.prodi
+        from mahasiswa as m
+        left join jurusan as j on m.jurusan_id = j.id
+        where m.nrp = ? 
+        `;
         this.SelectWithJurusan = `SELECT
         m.id,
         m.nrp,

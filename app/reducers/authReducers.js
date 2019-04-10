@@ -4,7 +4,7 @@ import {
 import isEmpty from '../lib/is-empty';
 const initialState = {
     isAuthenticated: false,
-    admin: {},
+    mahasiswa: {},
     loading: false,
 };
 
@@ -14,7 +14,7 @@ export default function (state = initialState, action) {
         case AUTH.login:
             return {
                 ...state,
-                admin:action.payload,
+                mahasiswa:action.payload,
                 isAuthenticated: !isEmpty(action.payload),
                 loading: false
             }

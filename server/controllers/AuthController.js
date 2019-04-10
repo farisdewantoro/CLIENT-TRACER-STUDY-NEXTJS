@@ -1,7 +1,7 @@
 const db = require('../config/conn');
 const  {ValidationAuth} = require('../validations');
 const async = require('async');
-const {AdminModel} = require('../models');
+const {MahasiswaModel} = require('../models');
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const keys = require('../config/keys');
@@ -12,9 +12,10 @@ class AuthController{
         if (!isValid) {
             return res.status(400).json(errors);
         }
+        console.log(req.body);
         // const {username,password} = req.body;
-        // const queryLogin = new AdminModel().Login; 
-        // const queryCheck = new AdminModel().SelectAdmin;
+        // const queryLogin = new MahasiswaModel().Login; 
+        // const queryCheck = new MahasiswaModel().SelectAdmin;
         // db.query(queryCheck,[username],(err,result)=>{
         //     if(err){
         //         let errors = 'USERNAME ATAU PASSWORD SALAH';
