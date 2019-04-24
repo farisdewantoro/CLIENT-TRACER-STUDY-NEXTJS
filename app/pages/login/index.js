@@ -50,7 +50,7 @@ class Login extends Component {
       kodePIN: this.state.kodePIN.toString()
     }
     this.props.submitLogin(data);
- 
+
   }
 
   render() {
@@ -61,12 +61,12 @@ class Login extends Component {
       <div style={{ background:"#f58220",minHeight:"100vh"}}>
           <Grid container justify="center" >
             <Grid item md={4}>
-       
+
             <Card style={{marginTop:"20px"}}>
               {auths.loading && (
                 <LinearProgress color="secondary" />
               )}
-            
+
               <form onSubmit={this.onSubmitLogin}>
                 <CardHeader
                   title={<div>
@@ -94,7 +94,7 @@ class Login extends Component {
 
                   <Grid container direction="column" spacing={16}>
                     <Grid item xs={12}>
-                
+
                       <FormControl className={classes.margin} fullWidth>
                         <InputLabel shrink htmlFor="nrp" className={classes.bootstrapFormLabel}>
                           NRP
@@ -123,7 +123,8 @@ class Login extends Component {
                           name="kodePIN"
                           type="number"
                           value={kodePIN}
-                          type="kodePIN"
+                          type="password"
+
                           required
                           onChange={this.onChange}
                           classes={{
@@ -134,16 +135,16 @@ class Login extends Component {
                       </FormControl>
 
                     </Grid>
-                  
+
                       <FormHelperText error variant='filled'>
                         {errors.error}
                       </FormHelperText>
-                
+
                   </Grid>
                 </CardContent>
                 <CardActions>
 
-                  <Button variant="contained" style={{ margin: "20px 0", borderRadius: "15px" }} color="primary" fullWidth 
+                  <Button variant="contained" style={{ margin: "20px 0", borderRadius: "15px" }} color="primary" fullWidth
                   // onClick={this.onSubmitLogin}
                   type="submit"
                   >

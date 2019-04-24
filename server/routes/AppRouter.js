@@ -15,11 +15,12 @@ class AppRouter{
     buildRoutes(){
         this.router.post('/api/quisoner/create', QuisonerController.create);
         this.router.get('/api/quisoner/get-all', QuisonerController.getAll);
+        this.router.get('/api/quisoner/get-all/aktif', QuisonerController.getQuisonerAktif);
 
 
         this.router.post("/api/auth/login",AuthController.signin);
         this.router.post("/api/auth/logout", AuthController.logout);
-        
+
 
         this.router.get('/api/jurusan/get-all',JurusanController.getAll);
         this.router.get('/api/fakultas/get-all', FakultasController.getAll);

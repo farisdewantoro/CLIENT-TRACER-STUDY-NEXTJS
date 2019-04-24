@@ -62,11 +62,6 @@ class DataPrestasi extends Component {
                 <div>
                     <Grid container direction="column" spacing={16}>
                         <Grid item xs={12}>
-                            <a href="/data-prestasi/create">
-                                <Button variant="contained" color="primary">
-                                    TAMBAH DATA
-              </Button>
-                            </a>
 
                         </Grid>
                        <Grid item xs={12}>
@@ -125,15 +120,7 @@ class DataPrestasi extends Component {
                               </div>
 
                               <div className={classes.action}>
-                              <a href={`/data-prestasi/edit/${m.nrp}`}>
-                                <IconButton>
-                                  <CreateIcon />
-                                </IconButton>
-                                </a>
-                                <IconButton onClick={()=>this.openDialogDelete(m.id)}>
-                                    <DeleteIcon/>
-                                  </IconButton>
-
+                        
                               </div>
 
 

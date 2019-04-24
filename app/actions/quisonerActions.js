@@ -7,6 +7,28 @@ export const loadingQuisoner = () => {
         type: QUISONER.loading
     }
 }
+
+
+export const getQuisonerAktif = ()=>disbatch=>{
+  disbatch(loadingQuisoner());
+  axios.get('/api/quisoner/get-all/aktif')
+      .then(res => {
+          disbatch({
+              type: QUISONER.getAktif,
+              payload: res.data
+          })
+      })
+      .catch(err => {
+          let notification = {
+              error: true,
+              message: "There is an error !",
+              notification: true
+          }
+          disbatch(setNotification(notification));
+      })
+
+}
+
 export const createQuisoner = (data) => disbatch => {
     disbatch(loadingQuisoner());
     axios.post('/api/quisoner/create', data)
@@ -52,6 +74,3 @@ export const getAllQuisoner = () => disbatch => {
             disbatch(setNotification(notification));
         })
 }
-
-
-

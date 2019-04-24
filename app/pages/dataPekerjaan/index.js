@@ -49,11 +49,11 @@ class DataPekerjaan extends Component {
       closeDialogDelete=()=>{
         this.setState({ dialogDelete: false,mahasiswa_id:0 });
       }
-    
+
       dialogDeleteSubmit = ()=>{
         this.props.deleteMahasiswa(this.state.mahasiswa_id);
       }
-    
+
 
     render() {
         const { classes,mahasiswas} = this.props;
@@ -61,14 +61,7 @@ class DataPekerjaan extends Component {
             <Layout2 url={'/data-pekerjaan'}>
                 <div>
                     <Grid container direction="column" spacing={16}>
-                        <Grid item xs={12}>
-                            <a href="/data-pekerjaan/create">
-                                <Button variant="contained" color="primary">
-                                    TAMBAH DATA
-              </Button>
-                            </a>
 
-                        </Grid>
                         <Grid item xs={12}>
 
  <Paper className={classes.root} elevation={1}>
@@ -77,7 +70,7 @@ class DataPekerjaan extends Component {
                 </IconButton>
                 <Divider className={classes.divider} />
                 <InputBase className={classes.input} placeholder="Search " />
-         
+
                 <IconButton color="primary" className={classes.iconButton} aria-label="Directions">
                   <DirectionsIcon />
                 </IconButton>
@@ -129,15 +122,7 @@ class DataPekerjaan extends Component {
                               </div>
 
                               <div className={classes.action}>
-                              <a href={`/data-pekerjaan/edit/${m.nrp}`}>
-                                <IconButton>
-                                  <CreateIcon />
-                                </IconButton>
-                                </a>
-                                <IconButton onClick={()=>this.openDialogDelete(m.id)}>
-                                    <DeleteIcon/>
-                                  </IconButton>
-                           
+                        
                               </div>
 
 
@@ -153,7 +138,7 @@ class DataPekerjaan extends Component {
                 </Grid>
               )
             })}
-            
+
                     </Grid>
                     <DialogDelete
             openDialogDelete={this.openDialogDelete}

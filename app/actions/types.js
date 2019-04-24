@@ -17,7 +17,8 @@ export const AUTH={
 // Quisoner
 export const QUISONER={
     getAll:'QUISONER:GETALL',
-    loading:'QUISONER:LOADING'
+    loading:'QUISONER:LOADING',
+    getAktif:'QUISONER:AKTIF'
 }
 
 // ADMIN

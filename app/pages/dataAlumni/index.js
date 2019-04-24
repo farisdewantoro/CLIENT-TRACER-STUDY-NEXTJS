@@ -70,14 +70,7 @@ class DataAlumni extends Component {
       <Layout2 url={'/data-alumni'} >
         <div>
           <Grid container direction="column" spacing={16}>
-          <Grid item xs={12}>
-            <Link href="/data-alumni/create">
-                <Button variant="contained" color="primary">
-                  TAMBAH DATA
-              </Button>
-            </Link>
-     
-          </Grid>
+        
           <Grid item xs={12}>
               <Paper className={classes.root} elevation={1}>
                 <IconButton className={classes.iconButton} aria-label="Search">
@@ -85,7 +78,7 @@ class DataAlumni extends Component {
                 </IconButton>
                 <Divider className={classes.divider} />
                 <InputBase className={classes.input} placeholder="Search " />
-         
+
                 <IconButton color="primary" className={classes.iconButton} aria-label="Directions">
                   <DirectionsIcon />
                 </IconButton>
@@ -136,15 +129,7 @@ class DataAlumni extends Component {
                               </div>
 
                               <div className={classes.action}>
-                              <a href={`/data-alumni/edit/${m.nrp}`}>
-                                <IconButton>
-                                  <CreateIcon />
-                                </IconButton>
-                                </a>
-                                <IconButton onClick={()=>this.openDialogDelete(m.id)}>
-                                    <DeleteIcon/>
-                                  </IconButton>
-                           
+
                               </div>
 
 
@@ -160,7 +145,7 @@ class DataAlumni extends Component {
                 </Grid>
               )
             })}
-            
+
           </Grid>
           <DialogDelete
             openDialogDelete={this.openDialogDelete}
@@ -170,7 +155,7 @@ class DataAlumni extends Component {
           />
         </div>
       </Layout2>
-    
+
     )
   }
 }

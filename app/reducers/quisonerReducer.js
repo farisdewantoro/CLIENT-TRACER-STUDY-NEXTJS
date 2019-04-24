@@ -4,7 +4,10 @@ import {
 import isEmpty from '../lib/is-empty';
 const initialState = {
     quisoner: [],
-    loading: false
+    loading: false,
+    q_jawaban:[],
+    q_jawaban_lainnya:[],
+    q_pertanyaan:[]
 };
 
 export default function (state = initialState, action) {
@@ -21,6 +24,15 @@ export default function (state = initialState, action) {
                 ...state,
                 loading: true
             }
+        case QUISONER.getAktif:
+          return{
+            ...state,
+            loading:false,
+            quisoner:action.payload.quisoner,
+            q_pertanyaan:action.payload.q_pertanyaan,
+            q_jawaban:action.payload.q_jawaban,
+            q_jawaban_lainnya:action.payload.q_jawaban_lainnya,
+          }
 
         default:
             return state;

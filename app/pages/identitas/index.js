@@ -16,6 +16,19 @@ import {
   AppBar
 } from '@material-ui/core';
 class Identitas extends Component {
+  static async getInitialProps(something) {
+      const { res, req } = something;
+      if (!req.user) {
+          res.writeHead(302, {
+              Location: '/login'
+          })
+          res.end()
+      }
+    const mahasiswaProps = req.user;
+    return {
+      mahasiswaProps
+    }
+  }
   constructor(props){
     super(props);
     this.state={
@@ -29,6 +42,21 @@ class Identitas extends Component {
         kodePIN:''
       }
     }
+  }
+
+  componentDidMount(){
+    if(this.props.mahasiswaProps){
+      this.setState({
+        mahasiswa:this.props.mahasiswaProps
+      })
+    }
+  }
+  UNSAFE_componentWillReceiveProps(nextProps){
+      if(nextProps.mahasiswaProps){
+        this.setState({
+          mahasiswa:nextProps.mahasiswaProps
+        })
+      }
   }
 
   handlerOnChange = (e) =>{
@@ -45,8 +73,8 @@ class Identitas extends Component {
     const { classes } = this.props;
     const {nrp,nama,email,jurusan,alamat,noTelepon,kodePIN} = this.state.mahasiswa;
     return (
-     
-        <Layout2>
+
+        <Layout2 url="/identitas">
         <div>
             <Grid container >
                 <Grid item xs={12}>
@@ -131,13 +159,13 @@ class Identitas extends Component {
                           </Grid>
                         </Grid>
                         </div>
-                        
-                
+
+
                         </Grid>
                     </Grid>
                 </CardContent>
-            
-                    
+
+
                   <AppBar position="static" color="default" elevation={0}>
                     <Grid container justify="flex-end">
                       <div >
@@ -150,16 +178,16 @@ class Identitas extends Component {
                       </div>
                     </Grid>
                         </AppBar>
-                   
-                      
-               
+
+
+
               </Card>
                 </Grid>
             </Grid>
         </div>
         </Layout2>
 
-     
+
     )
   }
 }

@@ -3,6 +3,44 @@ const {QuisonerModel} = require('../models');
 // const { ValidationMahasiswa } = require('../validations');
 const async = require('async');
 class QuisonerController{
+
+  getQuisonerAktif(req,res){
+    const queryQuisonerAktif = new QuisonerModel().selectQuisonerAktif;
+    const queryQ_pertanyaanAktif = new QuisonerModel().selectQ_pertanyaanAktif;
+    const queryQ_jawabanAktif = new QuisonerModel().selectQ_jawabanAktif;
+    const queryQ_jawabanLainnyaAktif= new QuisonerModel().selectQ_jawabanLainyaAktif;
+
+    async.parallel({
+      quisoner:function(callback){
+        db.query(queryQuisonerAktif,(err,result)=>{
+            callback(err,result);
+        });
+      },
+      q_pertanyaan:function(callback){
+        db.query(queryQ_pertanyaanAktif,(err,result)=>{
+            callback(err,result);
+        });
+      },
+      q_jawaban:function(callback){
+        db.query(queryQ_jawabanAktif,(err,result)=>{
+            callback(err,result);
+        });
+      },
+      q_jawaban_lainnya:function(callback){
+        db.query(queryQ_jawabanLainnyaAktif,(err,result)=>{
+            callback(err,result);
+        });
+      }
+    },function(err,result){
+      if (err) return res.status(400).json(err);
+      if (result) {
+          return res.status(200).json(result);
+      }
+
+    });
+
+  }
+
     create(req,res){
     //   TODO:VALIDATION
         let quisoner =req.body.quisoner;
@@ -12,7 +50,7 @@ class QuisonerController{
                 pertanyaan:qp.kode
             }
         });
-   
+
 
         const queryInsertQuisoner = new QuisonerModel().insertQuisoner;
         const queryInsertQ_pertanyaan = new QuisonerModel().insertQ_pertanyaan;
@@ -22,7 +60,7 @@ class QuisonerController{
                 db.query(queryInsertQuisoner,[quisoner],(err,result)=>{
                     if (err) callback(err);
                     if (result) {
-                    
+
                         const lastId = result.insertId;
                         callback(null, lastId);
                     }
@@ -36,7 +74,7 @@ class QuisonerController{
                         qp.kode,
                         qp.kode
                     ]
-               
+
                 });
                 db.query(queryInsertQ_pertanyaan, [Nq_pertanyaan],(err,result)=>{
                     if (err) callback(err);
@@ -49,7 +87,7 @@ class QuisonerController{
             function Q_jawaban(arg2, callback){
                 let lastId = arg2;
                 let id = lastId - (req.body.q_pertanyaan.length-1);
-          
+
                 let q_jawaban = req.body.q_pertanyaan.map((qp, i) => qp.q_jawaban);
                 let newD = [];
                 q_jawaban.forEach((qj, i) => {
@@ -65,7 +103,7 @@ class QuisonerController{
                 db.query(queryInsertQ_jawaban, [newD],(err,result)=>{
                     if (err) callback(err);
                     if (result) {
-                       
+
                         callback(null, newD);
                     }
                 })
@@ -88,7 +126,7 @@ class QuisonerController{
                         kode:qj.kode,
                         description:(typeof qj.q_jawaban_lainnya === 'object' && qj.q_jawaban_lainnya.description) ? qj.q_jawaban_lainnya.description : 0
                     }
-                }); 
+                });
 
                 let queryData = [];
                 q_jawabanLainnya.forEach(qj => {
@@ -105,13 +143,13 @@ class QuisonerController{
                 })
             }
         ], function (err, result) {
-            
+
             if (err) return res.status(400).json(err);
             if (result) {
                 return res.status(200).json(result);
             }
         })
-        
+
     }
     getAll(req,res){
         const querSelectQuisoner = new QuisonerModel().selectQuisoner;
