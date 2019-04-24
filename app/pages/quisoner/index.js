@@ -16,7 +16,8 @@ import {
     Radio,
     RadioGroup,
     FormHelperText,
-    
+    InputBase,
+    InputLabel,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -81,27 +82,59 @@ class DataQuisoner extends Component {
                                         return(
                                             <div key={iQ}>   
                                       
-                                    <Typography style={{margin:"0px 5px"}}>
+                                    <Typography style={{margin:"0px 5px",fontWeight:"bold"}}>
                                     {qp.pertanyaan}
                                 </Typography>
-                                <FormControl component="fieldset" className={classes.formControl}>
-                                        <RadioGroup
-                                          aria-label="jawaban"
-                                          name={qp.kode}
-                                          className={classes.group}
-                                          value={this.state.value}
-                                          onChange={this.handleChange}
-                                        >
-                                {quisoners.q_jawaban.filter((qj,iJ)=>qj.q_pertanyaan_id !== qp.id).map(j1=>{
-                                    return(
-                                        <div>
-                                          <FormControlLabel value={j1.jawaban} control={<Radio />} label={j1.jawaban} />
-                                          </div>
-                                    )
-                                })}    
-                                
-                                </RadioGroup>
-                                      </FormControl>
+                                <div style={{margin:"10px 20px"}}>
+                                                    <FormControl component="fieldset" className={classes.formControl}>
+                                                 
+                                                            {quisoners.q_jawaban.filter((qj, iJ) => qj.q_pertanyaan_id == qp.id).map(j1 => {
+                                                               
+                                                                return (
+                                                                    <div>
+                                                                        <div style={{display:'block'}}>
+                                                                            <Radio
+                                                                                // checked={this.state.selectedValue === 'b'}
+                                                                                // onChange={this.handleChange}
+                                                                                value="b"
+                                                                                name="radio-button-demo"
+                                                                            />
+                                                                            <FormLabel>
+                                                                                {j1.jawaban}
+                                                                            </FormLabel>  
+                                                                        </div>
+                                                                        {quisoners.q_jawaban_lainnya.filter((qjl, qjI) => qjl.q_jawaban_id === j1.id ).map(qjl1=>{
+                                                                            return(
+                                                                                <div style={{display:"flex",justifyContent:"center",alignItems:"center",padding:"0px 30px"}}>
+                                                                                    {/* <FormControl className={classes.jawabanLainnya}> */}
+                                                                                   <Typography style={{margin:"0px 20px"}}>
+                                                                                        {qjl1.description}
+                                                                                   </Typography>
+                                                                                        <InputBase
+                                                                                            id="bootstrap-input"
+                                                                                            // placeholder={}
+                                                                                            classes={{
+                                                                                                root: classes.bootstrapRoot,
+                                                                                                input: classes.bootstrapInput,
+                                                                                            }}
+                                                                                        />
+                                                                                    {/* </FormControl> */}
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                     
+                                                                                                       
+                                                                        {/* <FormControlLabel value={j1.jawaban} control={<Radio 
+                                                                        
+                                                                        />} label={j1.jawaban} /> */}
+
+                                                                    </div>
+                                                                )
+                                                            })}
+
+                                                    </FormControl>
+                                </div>
+                          
                                             </div>
                                         )
                                     })}
