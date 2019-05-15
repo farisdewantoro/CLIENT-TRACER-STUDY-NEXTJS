@@ -5,6 +5,7 @@ import Layout2 from '../../components/layout/layout_2';
 import {
     Grid,
     Card,
+    CardActions,
     Button,
     CardContent,
     CardHeader,
@@ -18,6 +19,8 @@ import {
     FormHelperText,
     InputBase,
     InputLabel,
+    TextField,
+    Divider
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -26,6 +29,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { getQuisonerAktif } from '../../actions/quisonerActions';
+import update from 'react-addons-update';
 class DataQuisoner extends Component {
     static async getInitialProps(something) {
         const { res, req } = something;
@@ -38,18 +42,58 @@ class DataQuisoner extends Component {
 
     }
     state={
-        value:''
+        value:'',
+        jawaban:[]
     }
 
     componentDidMount() {
         this.props.getQuisonerAktif();
     }
-    handleChange = event => {
-        this.setState({ value: event.target.value });
+    handlerChangeJawabanLainnya = (e, data)=>{
+        let checkIndex;
+        this.state.jawaban.forEach((jUser, i) => {
+            if (jUser.idJawaban === data.q_jawaban_id.toString()) {
+                checkIndex = i;
+            }
+        });
+
+        data.value = e.target.value;
+
+        this.setState({
+            jawaban: update(this.state.jawaban, { [checkIndex]: { jawabanLainnya: { $set: data} } })
+        });
+        console.log(this.state.jawaban);
+    }
+    handleChange = (e,data)=> {
+        let checkIndex;
+       this.state.jawaban.forEach((jUser,i) =>{
+           if (jUser.kodePertanyaan === data.kode){
+               checkIndex = i;
+           }
+       });
+        let newData = {
+            kodePertanyaan: data.kode,
+            pertanyaan: data.pertanyaan,
+            idPertanyaan: data.id,
+            idJawaban:e.target.value,
+            jawabanLainnya:[]
+        };
+       if(typeof checkIndex !== "undefined"){
+           this.setState({
+               jawaban: update(this.state.jawaban, { [checkIndex]: { $set: newData } })
+           })
+        
+       }else{
+           this.setState({
+               jawaban: this.state.jawaban.concat(newData)
+           });
+       }
+   
       };
     render() {
         const { classes, quisoners } = this.props;
-        const {value} = this.state;
+        const { value, jawaban} = this.state;
+        console.log(jawaban)
         return (
             <Layout2 url={'/data-quisoner'}>
                 <div>
@@ -89,35 +133,52 @@ class DataQuisoner extends Component {
                                                     <FormControl component="fieldset" className={classes.formControl}>
                                                  
                                                             {quisoners.q_jawaban.filter((qj, iJ) => qj.q_pertanyaan_id == qp.id).map(j1 => {
-                                                               
-                                                                return (
+                                                      
+                                                           return (
                                                                     <div>
                                                                         <div style={{display:'block'}}>
-                                                                            <Radio
-                                                                                // checked={this.state.selectedValue === 'b'}
-                                                                                // onChange={this.handleChange}
-                                                                                value="b"
-                                                                                name="radio-button-demo"
-                                                                            />
-                                                                            <FormLabel>
+                                                                            <RadioGroup
+                                                                                // checked={this.state.jawaban.filter(jUser => jUser.kodePertanyaan === qp.kode && jUser.kodeJawaban === j1.kode ).length > 0 }
+                                                                                onChange={(e) => this.handleChange(e,qp)}
+                                                                                value={this.state.jawaban.filter(jUser =>  jUser.idJawaban === j1.id.toString()).map(jUN => {
+                                                                                    return jUN.idJawaban
+                                                                                }).toString()}
+                                                                                name="jawaban"
+                                                                            >
+                                                                            {/* <FormLabel>
                                                                                 {j1.jawaban}
-                                                                            </FormLabel>  
+                                                                            </FormLabel>   */}
+                                                                            <FormControlLabel
+                                                                                value={j1.id.toString()}
+                                                                                control={<Radio color="primary" />}
+                                                                                label={j1.jawaban}
+                                                                                // labelPlacement="start"
+                                                                            />
+                                                                            </RadioGroup>
                                                                         </div>
                                                                         {quisoners.q_jawaban_lainnya.filter((qjl, qjI) => qjl.q_jawaban_id === j1.id ).map(qjl1=>{
+                                                                  
                                                                             return(
                                                                                 <div style={{display:"flex",justifyContent:"center",alignItems:"center",padding:"0px 30px"}}>
                                                                                     {/* <FormControl className={classes.jawabanLainnya}> */}
                                                                                    <Typography style={{margin:"0px 20px"}}>
                                                                                         {qjl1.description}
                                                                                    </Typography>
-                                                                                        <InputBase
-                                                                                            id="bootstrap-input"
-                                                                                            // placeholder={}
-                                                                                            classes={{
-                                                                                                root: classes.bootstrapRoot,
-                                                                                                input: classes.bootstrapInput,
-                                                                                            }}
-                                                                                        />
+                                                                                    <TextField
+                                                                                        id="outlined-name"
+                                                                                        label=""
+                                                                                        className={classes.textField}
+                                                                                        value={this.state.jawaban.filter(jUser => jUser.idJawaban === qjl1.q_jawaban_id.toString()).map(jUN => {
+                                                                                            return jUN.jawabanLainnya
+                                                                                        }).map(jw=>{
+                                                                                            return jw.value
+                                                                                        })}
+                                                                                        disabled={this.state.jawaban.filter(jUser => jUser.idJawaban === qjl1.q_jawaban_id.toString()).length === 0}
+                                                                                        onChange={(e) => this.handlerChangeJawabanLainnya(e,qjl1)}
+                                                                                        variant="outlined"
+                                                                                    />
+
+                                                                                   
                                                                                     {/* </FormControl> */}
                                                                                 </div>
                                                                             )
@@ -139,6 +200,12 @@ class DataQuisoner extends Component {
                                         )
                                     })}
                                 </CardContent>
+                                <Divider/>
+                                     <CardActions>
+                                        <Button color="primary" > 
+                                            SUBMIT    
+                                        </Button>     
+                                    </CardActions>   
                             </Card>
                         </Grid>
 
