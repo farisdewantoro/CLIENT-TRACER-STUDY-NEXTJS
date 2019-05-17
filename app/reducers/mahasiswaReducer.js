@@ -19,6 +19,14 @@ export default function (state = initialState, action) {
                 loading: true,
                 mahasiswa:action.payload
             }
+        case MAHASISWA.getMahasiswa:
+            return{
+                ...state,
+                loading:false,
+                mahasiswa: action.payload.mahasiswa,
+                prestasi:action.payload.prestasi,
+                pekerjaan:action.payload.pekerjaan
+            }
         case MAHASISWA.getAllPekerjaan:
             return{
                 ...state,

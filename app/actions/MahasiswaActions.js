@@ -12,6 +12,25 @@ export const loadingMahasiswa = () => {
     }
 }
 
+export const getMahasiswa = (id) => disbatch => {
+    axios.get('/api/mahasiswa/get-identitas/' + id)
+        .then(res => {
+            console.log(res.data)
+            disbatch({
+                type: MAHASISWA.getMahasiswa,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            let notification = {
+                error: true,
+                message: "Error !",
+                notification: true
+            }
+            disbatch(setNotification(notification));
+        });
+}
+
 export const addPrestasi = (data) =>disbatch=>{
     disbatch(loadingMahasiswa());
     axios.post('/api/mahasiswa/add/prestasi',data)

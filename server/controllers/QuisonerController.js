@@ -2,6 +2,30 @@ const db = require('../config/conn');
 const {QuisonerModel} = require('../models');
 // const { ValidationMahasiswa } = require('../validations');
 const async = require('async');
+
+function getQuisonerUser(mahasiswa_id,question_id){
+    const queryQuisonerUser = new QuisonerModel().selectQ_user; 
+    return new Promise((res,rej)=>{
+        db.query(queryQuisonerUser, [mahasiswa_id, question_id],(err,result)=>{
+            if(err) return rej(err);
+            if(result) return res(result);
+        })
+    });
+}
+
+function insertQuisonerUser(mahasiswa_id,question_id){
+    const queryQuisonerUser = new QuisonerModel().insertQ_user;
+    return new Promise((res, rej) => {
+        db.query(queryQuisonerUser, [{
+             quisoner_id:question_id,
+            mahasiswa_id: mahasiswa_id
+        }], (err, result) => {
+            if (err) return rej(err);
+            if (result) return res(result.insertId);
+        })
+    });
+}
+
 class QuisonerController{
 
   getQuisonerAktif(req,res){
@@ -9,7 +33,8 @@ class QuisonerController{
     const queryQ_pertanyaanAktif = new QuisonerModel().selectQ_pertanyaanAktif;
     const queryQ_jawabanAktif = new QuisonerModel().selectQ_jawabanAktif;
     const queryQ_jawabanLainnyaAktif= new QuisonerModel().selectQ_jawabanLainyaAktif;
-
+    const queryQ_user= new QuisonerModel().selectQ_userMahasiswa;
+    
     async.parallel({
       quisoner:function(callback){
         db.query(queryQuisonerAktif,(err,result)=>{
@@ -30,7 +55,13 @@ class QuisonerController{
         db.query(queryQ_jawabanLainnyaAktif,(err,result)=>{
             callback(err,result);
         });
+      },
+      q_user(callback){
+          db.query(queryQ_user,[req.user.id],(err,result)=>{
+                   callback(err,result);
+          })
       }
+
     },function(err,result){
       if (err) return res.status(400).json(err);
       if (result) {
@@ -40,6 +71,80 @@ class QuisonerController{
     });
 
   }
+
+    
+   async submitJawaban(req,res){
+        const queryInsertJawaban = new QuisonerModel().insertQ_jawaban_user;
+        const queryInsertJawabanlainnya = new QuisonerModel().insertQ_jawaban_user_lainnya;
+ 
+        try{
+        const q_user = await getQuisonerUser(
+            req.user.id,
+            req.body.quisoner[0].id
+        );
+       let q_user_id;
+        if(q_user.length > 0 ){
+            q_user_id = q_user[0].id;
+        }else{
+            q_user_id = await insertQuisonerUser(
+                req.user.id,
+                req.body.quisoner[0].id
+            ); 
+        }
+         
+        // console.log(req.body);
+        let dataJawabanLainnya = []
+        const dataJawaban = req.body.jawaban.map(rb=>{
+            return[
+                q_user_id,
+                parseInt(rb.idJawaban)
+            ]
+        });
+        let jawabanLainnya=[];
+        req.body.jawaban.forEach(rb=>{
+            if(rb.jawabanLainnya.length !== 0){
+                jawabanLainnya.push(rb.jawabanLainnya)
+            }
+        });
+        if (jawabanLainnya.length !== 0){
+            jawabanLainnya.forEach(jw=>{
+                dataJawabanLainnya.push([
+                    q_user_id,
+                    parseInt(jw.id),
+                    jw.value
+                ]
+                 );
+            })
+        }
+        async.parallel({
+            insert_jawaban:function(cb){
+                db.query(queryInsertJawaban,[dataJawaban],(err,result)=>{
+                    cb(err,result);
+                })
+            },
+            insert_jawabanLainnya:function(cb){
+                if (dataJawabanLainnya.length > 0 ){
+                    db.query(queryInsertJawabanlainnya, [dataJawabanLainnya], (err, result) => {
+                        cb(err, result);
+                    })
+                }else{
+                    cb(null,'ok')
+                }
+              
+            }
+        },function(err,result){
+            if(err) return res.status(400).json(err);
+            if(result) return res.status(200).json(result);
+        });
+
+
+
+        }
+        catch(err){
+           return res.status(400).json(err);
+        }
+     
+    }
 
     create(req,res){
     //   TODO:VALIDATION

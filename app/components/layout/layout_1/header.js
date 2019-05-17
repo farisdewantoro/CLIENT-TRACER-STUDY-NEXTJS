@@ -12,7 +12,7 @@ import Link from 'next/link';
 const Header = props => {
   return (
   
-          <AppBar >
+    <AppBar style={{ background:"#18202c"}}>
               <Toolbar>
                    <Grid container alignItems="center" spacing={16}>
                          <Grid item>

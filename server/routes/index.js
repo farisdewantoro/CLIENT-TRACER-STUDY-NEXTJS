@@ -1,6 +1,7 @@
 const routes = require('next-routes')
 
 module.exports = routes()
+    .add('dashboard','/dashboard','dashboard')
     .add('home','/','index')
     .add('login','/login','login')
     .add('tes','/login/tes','dashboard')

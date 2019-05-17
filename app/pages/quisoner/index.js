@@ -28,7 +28,7 @@ import Link from 'next/link';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { getQuisonerAktif } from '../../actions/quisonerActions';
+import { getQuisonerAktif, submitJawabanQuisoner, getQuisonerAnswer } from '../../actions/quisonerActions';
 import update from 'react-addons-update';
 class DataQuisoner extends Component {
     static async getInitialProps(something) {
@@ -62,7 +62,13 @@ class DataQuisoner extends Component {
         this.setState({
             jawaban: update(this.state.jawaban, { [checkIndex]: { jawabanLainnya: { $set: data} } })
         });
-        console.log(this.state.jawaban);
+    }
+
+    handlerSubmitQuisoner =()=>{
+      const jawaban =  this.state.jawaban;
+      const quisoner = this.props.quisoners.quisoner;
+      this.props.submitJawabanQuisoner({jawaban,
+          quisoner});
     }
     handleChange = (e,data)=> {
         let checkIndex;
@@ -93,10 +99,30 @@ class DataQuisoner extends Component {
     render() {
         const { classes, quisoners } = this.props;
         const { value, jawaban} = this.state;
-        console.log(jawaban)
         return (
             <Layout2 url={'/data-quisoner'}>
                 <div>
+                    {quisoners.q_user.length > 0 ? (
+                     <Card>
+                         <CardContent>
+                                {/* <div style={{ display: 'flex' }}>
+                                    <Typography style={{ margin: "0px 5px" }}>
+                                        {quisoners.quisoner[0].judul}
+                                    </Typography>
+
+                                    <Typography style={{ margin: "0px 5px" }}>
+                                        {quisoners.quisoner[0].tahun}
+                                    </Typography>
+                                </div>    */}
+                                <div>
+                                    <Typography>
+                                        Kamu telah mengisi form quisoner
+                                    </Typography>
+                                </div>
+                         </CardContent>
+                     </Card>
+                    ) : (
+                   
                     <Grid container direction="column" spacing={16}>
                         <Grid item xs={12}>
                         {quisoners.quisoner.map(q=>{
@@ -202,7 +228,7 @@ class DataQuisoner extends Component {
                                 </CardContent>
                                 <Divider/>
                                      <CardActions>
-                                        <Button color="primary" > 
+                                        <Button color="primary" onClick={this.handlerSubmitQuisoner}> 
                                             SUBMIT    
                                         </Button>     
                                     </CardActions>   
@@ -210,6 +236,8 @@ class DataQuisoner extends Component {
                         </Grid>
 
                     </Grid>
+        )
+    }
                 </div>
             </Layout2>
 
@@ -218,12 +246,12 @@ class DataQuisoner extends Component {
 }
 
 DataQuisoner.propTypes = {
-    classes: PropTypes.object.isRequired
-
+    classes: PropTypes.object.isRequired,
+    submitJawabanQuisoner:PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
     quisoners: state.quisoners
 });
 
-export default compose(withStyles(styles), connect(mapStateToProps, { getQuisonerAktif }))(DataQuisoner);
+export default compose(withStyles(styles), connect(mapStateToProps, { getQuisonerAktif, submitJawabanQuisoner }))(DataQuisoner);

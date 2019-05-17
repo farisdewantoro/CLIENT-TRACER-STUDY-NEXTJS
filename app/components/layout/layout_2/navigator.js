@@ -28,6 +28,7 @@ import Link from 'next/link';
 import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {logout} from '../../../actions/authActions';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 const styles = theme => ({
     categoryHeader: {
         paddingTop: 16,
@@ -78,6 +79,7 @@ function Navigator(props) {
     const { classes, url, ...other } = props;
     let listMenu = [];
     listMenu = [
+          { id: 'Dashboard', icon: <DashboardIcon />, link: '/dashboard' }, 
         { id: 'Identitas', icon: <PeopleIcon />, link: '/identitas', },
         { id: 'Data Alumni', icon: <DnsRoundedIcon />, link: '/data-alumni' },
         { id: 'Data Pekerjaan', icon: <WorkIcon />, link: '/data-pekerjaan' },

@@ -13,8 +13,25 @@ import {
   TextField,
   CardMedia,
   CardActions,
-  AppBar
+  AppBar,
+  Divider
 } from '@material-ui/core';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PhoneIcon from '@material-ui/icons/Phone';
+import WorkIcon from '@material-ui/icons/Work';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HelpIcon from '@material-ui/icons/Help';
+import GolfCourseIcon from '@material-ui/icons/GolfCourse';
+import ThumbDown from '@material-ui/icons/ThumbDown';
+import ThumbUp from '@material-ui/icons/ThumbUp';
+import PersonalInformation from './personalInformation';
+import SwipeableViews from 'react-swipeable-views';
+import {getMahasiswa} from '../../actions/MahasiswaActions';
+import {compose} from 'redux';
+import {connect} from 'react-redux';
+import Prestasi from './prestasi';
+import Pekerjaan from './pekerjaan';
 class Identitas extends Component {
   static async getInitialProps(something) {
       const { res, req } = something;
@@ -40,7 +57,8 @@ class Identitas extends Component {
         alamat:'',
         noTelepon:'',
         kodePIN:''
-      }
+      },
+      tabs:0
     }
   }
 
@@ -50,6 +68,7 @@ class Identitas extends Component {
         mahasiswa:this.props.mahasiswaProps
       })
     }
+    this.props.getMahasiswa(this.props.mahasiswaProps.id);
   }
   UNSAFE_componentWillReceiveProps(nextProps){
       if(nextProps.mahasiswaProps){
@@ -69,100 +88,62 @@ class Identitas extends Component {
       }
     }));
   }
+  handleChange = (event, value) => {
+ 
+    this.setState({ tabs:value });
+  };
+
+  handleChangeIndex = index => {
+    this.setState({ tabs: index });
+  };
   render() {
-    const { classes } = this.props;
-    const {nrp,nama,email,jurusan,alamat,noTelepon,kodePIN} = this.state.mahasiswa;
+    const { classes, theme,mahasiswas } = this.props;
+    // const {nrp,nama,email,jurusan,alamat,noTelepon,kodePIN,tabs} = this.state.mahasiswa;
+    const { mahasiswa, tabs}=this.state;
     return (
 
         <Layout2 url="/identitas">
         <div>
+         
+          {/* {value === 0 && <TabContainer>Item One</TabContainer>} */}
             <Grid container >
                 <Grid item xs={12}>
               <Card>
+                <AppBar position="static" color="inherit" elevation={0}>
+                  <Tabs
+                    value={tabs}
+                    onChange={this.handleChange}
+                    // variant="scrollable"
+                    centered
+                    scrollButtons="on"
+                    indicatorColor="primary"
+                    textColor="primary"
+                  >
+                    <Tab label=" Profile" icon={<PersonPinIcon />} />
+                    <Tab label="Prestasi" icon={<GolfCourseIcon />} />
+                    <Tab label="Pekerjaan" icon={<WorkIcon />} />
+                  </Tabs>
+                </AppBar>
+                <Divider style={{ backgroundColor:"#cecece"}}/>
                 <CardContent>
-                    <Grid container justify="center" direction="row">
-                        <Grid item md={10}>
-                        <Grid container >
-                        <Typography className={classes.rootTitle}>
-                          Personal Information
-                        </Typography>
-                        </Grid>
-                        <div style={{padding:"10px 0 40px"}}>
-                        <Grid container justify="center" direction="row" spacing={32}>
-                          <Grid item md={4}>
-                            <CardActionArea>
-                              <CardMedia
-                                component="img"
-                                alt="Contemplative Reptile"
-                                className={classes.media}
-                                height="200"
-                                image="/static/noImage.png"
-                                title="Contemplative Reptile"
-                              />
-                              <Typography>
-                                NO IMAGE
-                            </Typography>
-                            </CardActionArea>
-                          </Grid>
-                          <Grid item md={8}>
-
-                            <div>
-                              <TextField
-                                label="NRP"
-                                value={nrp}
-                                name="nrp"
-                                disabled
-                                InputLabelProps={
-                                  { shrink: true }
-                                }
-                                margin="normal"
-                                fullWidth
-                                onChange={this.handlerOnChange}
-                              />
-                              <TextField
-                                label="Nama"
-                                value={nama}
-                                name="nama"
-                                InputLabelProps={
-                                  { shrink: true }
-                                }
-                                margin="normal"
-                                fullWidth
-                                onChange={this.handlerOnChange}
-                              />
-                              <TextField
-                                label="No Telepon"
-                                value={noTelepon}
-                                name="noTelepon"
-                                type="number"
-                                InputLabelProps={
-                                  { shrink: true }
-                                }
-                                margin="normal"
-                                fullWidth
-                                onChange={this.handlerOnChange}
-                              />
-                              <TextField
-                                label="Alamat"
-                                value={alamat}
-                                name="alamat"
-                                multiline
-                                rows="4"
-                                InputLabelProps={
-                                  { shrink: true }
-                                }
-                                margin="normal"
-                                fullWidth
-                                onChange={this.handlerOnChange}
-                              />
-                            </div>
-                          </Grid>
-                        </Grid>
-                        </div>
-
-
-                        </Grid>
-                    </Grid>
+                  <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={tabs}
+                    onChangeIndex={this.handleChangeIndex}
+                  >
+                    <PersonalInformation
+                      {...mahasiswa}
+                      classes={classes}
+                      handlerOnChange={this.handlerOnChange}
+                    /> 
+                    <Prestasi
+                      {...mahasiswas.prestasi[0]}
+                    />
+                    <Pekerjaan
+                      {...mahasiswas.pekerjaan[0]}
+                    />
+                  </SwipeableViews>
+              
                 </CardContent>
 
 
@@ -194,5 +175,11 @@ class Identitas extends Component {
 
 Identitas.propTypes = {
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  getMahasiswa:PropTypes.func.isRequired
 };
-export default withStyles(styles)(Identitas);
+
+const mapStateToProps = (state)=>({
+  mahasiswas:state.mahasiswas
+})
+export default compose(withStyles(styles, { withTheme: true }),connect(mapStateToProps,{getMahasiswa}))(Identitas);

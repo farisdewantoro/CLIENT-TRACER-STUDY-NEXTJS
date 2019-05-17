@@ -8,7 +8,20 @@ export const loadingQuisoner = () => {
     }
 }
 
-
+export const submitJawabanQuisoner = (data) => disbatch => {
+    axios.post('/api/quisoner/submit/jawaban',data)
+        .then(res=>{
+            console.log(res);
+        })
+        .catch(err => {
+            let notification = {
+                error: true,
+                message: "There is an error !",
+                notification: true
+            }
+            disbatch(setNotification(notification));
+        })
+}
 export const getQuisonerAktif = ()=>disbatch=>{
   disbatch(loadingQuisoner());
   axios.get('/api/quisoner/get-all/aktif')

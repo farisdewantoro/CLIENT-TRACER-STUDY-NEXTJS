@@ -17,6 +17,7 @@ class AppRouter{
         this.router.get('/api/quisoner/get-all', QuisonerController.getAll);
         this.router.get('/api/quisoner/get-all/aktif', QuisonerController.getQuisonerAktif);
 
+        this.router.post('/api/quisoner/submit/jawaban', QuisonerController.submitJawaban);
 
         this.router.post("/api/auth/login",AuthController.signin);
         this.router.post("/api/auth/logout", AuthController.logout);
@@ -35,7 +36,7 @@ class AppRouter{
         this.router.post('/api/mahasiswa/add/prestasi', MahasiswaController.addPrestasi);
         this.router.get('/api/mahasiswa/getall/pekerjaan',MahasiswaController.getAllPekerjaan)
         this.router.get('/api/mahasiswa/getall/prestasi',MahasiswaController.getAllPrestasi)
-
+        this.router.get('/api/mahasiswa/get-identitas/:id',MahasiswaController.getMahasiswa);
         this.router.post('/api/admin/create-master',AdminController.createMaster);
         this.router.post('/api/admin/create-admin', AdminController.createAdmin);
         this.router.get('/api/admin/get-all', AdminController.getAll);

@@ -3,6 +3,32 @@ const MahasiswaModel = require('../models/Mahasiswa');
 const { ValidationMahasiswa } = require('../validations');
 const async = require('async');
 class MahasiswaController{
+    getMahasiswa(req,res){
+        let queryMahasiswa = new MahasiswaModel().SelectMahasiswaID;
+        const queryPekerjaan = new MahasiswaModel().getAllPekerjaanByID;
+        const queryPrestasi = new MahasiswaModel().getPrestasiByID;
+        console.log(req.params)
+        async.parallel({
+            mahasiswa:function(cb){
+                db.query(queryMahasiswa,[req.params.id],(err,result)=>{
+                    cb(err,result);
+                })
+            },
+            pekerjaan:function(cb){
+                db.query(queryPekerjaan,[req.params.id],(err,result)=>{
+                    cb(err,result);
+                })
+            },
+            prestasi:function(cb){
+                db.query(queryPrestasi,[req.params.id],(err,result)=>{
+                    cb(err,result);
+                })
+            }
+        },function(err,result){
+            if(err) return res.status(400).json(err);
+            if(result) return res.status(200).json(result);
+        })
+    }
     create(req,res){
         let { errors, isValid } = ValidationMahasiswa.ValidationCreate(req.body);
         if (!isValid) {

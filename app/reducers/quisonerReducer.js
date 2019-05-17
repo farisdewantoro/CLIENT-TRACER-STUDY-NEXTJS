@@ -7,7 +7,8 @@ const initialState = {
     loading: false,
     q_jawaban:[],
     q_jawaban_lainnya:[],
-    q_pertanyaan:[]
+    q_pertanyaan:[],
+    q_user:[]
 };
 
 export default function (state = initialState, action) {
@@ -32,6 +33,7 @@ export default function (state = initialState, action) {
             q_pertanyaan:action.payload.q_pertanyaan,
             q_jawaban:action.payload.q_jawaban,
             q_jawaban_lainnya:action.payload.q_jawaban_lainnya,
+            q_user:action.payload.q_user
           }
 
         default:
