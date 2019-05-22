@@ -3,28 +3,6 @@ import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ResponsiveContainer
 } from 'recharts';
 
-const data = [
-  {
-    name: '2013', uv: 100, color:"#7FFFD4",
-  },
-  {
-    name: '2014', uv: 90,  color:"#7FFF00",
-  },
-{
-    name: '2015', uv: 70,  color:"#FF7F50",
-  },
-  {
-    name: '2016', uv: 120,  color:"#FFF8DC",
-  },
-    {
-    name: '2017', uv: 105,  color:"#ADFF2F",
-  },
-      {
-          name: '2018', uv: 100, color:"#ADD8E6",
-  },
-        {
-    name: '2019', uv: 140,  color:"#6184d8",
-  },
 
 
 //   {
@@ -42,17 +20,18 @@ const data = [
 //   {
 //     name: '2019', uv: 3490, pv: 4300, amt: 2100,
 //   },
-];
+
 
 export default class Example extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/30763kr7/';
 
   render() {
+    const {data} = this.props;
     return (
-         <div style={{ width: '100%', height: 300 }}>   
-            
+         <div style={{ width: '100%', height: 300 }}>
+
       <BarChart
-        width={900}
+        width={600}
         height={300}
         data={data}
         margin={{
@@ -65,7 +44,7 @@ export default class Example extends PureComponent {
         <Tooltip />
         <Legend />
         {/* <Bar dataKey="pv" fill="color" /> */}
-        <Bar dataKey="uv" fill="#82ca9d">
+        <Bar dataKey="uv" name="Total" fill="#82ca9d">
             {/* {data.map((d,index)=>{
                 return(
                     <Cell key={`cell-${index}`} fill={d.color}/>
@@ -73,7 +52,7 @@ export default class Example extends PureComponent {
             })} */}
         </Bar>
       </BarChart>
-      
+
     </div>
     );
   }
